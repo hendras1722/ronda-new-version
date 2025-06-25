@@ -12,8 +12,8 @@
         </svg>
         <div
           :class="[item.isMe ? 'border border-green-200 bg-green-200 w-fit h-fit p-5 rounded-bl-lg rounded-br-lg rounded-tl-lg' : 'border border-white bg-white w-fit h-fit p-5 rounded-bl-lg rounded-br-lg rounded-tr-lg max-w-[230px]']">
-          <div>Muh Syahendra A</div>
-          <div class="break-words">Hello world</div>
+          <div>{{ item.name }}</div>
+          <div class="break-words">{{ item.message }}</div>
         </div>
         <svg v-if="item.isMe" viewBox="0 0 8 13" height="13" width="8" class="text-green-200"
           preserveAspectRatio="xMidYMid meet" version="1.1" x="0px" y="0px" enable-background="new 0 0 8 13">
