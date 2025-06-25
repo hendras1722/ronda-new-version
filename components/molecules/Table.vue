@@ -1,6 +1,10 @@
 <template>
   <div class="mt-5 w-full flex flex-col gap-4">
-    <Input v-model="search" placeholder="Search users..." class="mb-4" />
+    <div class="flex items-center gap-3 mb-4 ">
+      <Input v-model="search" placeholder="Search users..." class="w-full" />
+      <MoleculesDatepicker v-model="date" />
+      <UButton>Download</UButton>
+    </div>
     <UTable :data="data" :columns="columns" class="flex-1">
       <template #name-cell="{ row }">
         <div class="flex items-center gap-3">
@@ -31,6 +35,7 @@
 <script setup lang="ts">
 import type { TableColumn, DropdownMenuItem } from '@nuxt/ui'
 import { useClipboard } from '@vueuse/core'
+import type { PropType } from 'vue'
 
 interface User {
   id: number
@@ -42,7 +47,7 @@ interface User {
 
 defineProps({
   fields: {
-    type: Array as () => TableColumn<User>[],
+    type: Array as PropType<TableColumn<Record<string, any>>[]>,
     default: () => []
   }
 })
@@ -50,6 +55,7 @@ defineProps({
 
 const toast = useToast()
 const { copy } = useClipboard()
+const date = ref(useCalendar(new Date()))
 
 const search = defineModel('search', {
   type: String,

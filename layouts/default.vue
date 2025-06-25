@@ -3,7 +3,7 @@
   <div class="h-screen bg-gray-50 overflow-hidden">
     <!-- Sidebar -->
     <div :class="[
-      'fixed inset-y-0 left-0 z-50 bg-white shadow-lg transition-all duration-300 ease-in-out',
+      'fixed min-h-full left-0 z-50 bg-white shadow-lg transition-all duration-300 ease-in-out',
       sidebarCollapsed ? '-translate-x-full lg:translate-x-0 lg:w-16' : 'w-64'
     ]" :style="!sidebarCollapsed && sidebarWidth ? `width: ${sidebarWidth}px` : ''">
       <!-- Sidebar Header -->
@@ -17,8 +17,13 @@
       </div>
 
       <!-- Navigation Menu -->
-      <nav class="flex-1 px-2 py-4 space-y-1">
-        <div class="space-y-1">
+      <nav class="flex-1 px-2 py-4 space-y-1" aria-label="Sidebar">
+
+        <UNavigationMenu :collapsed="sidebarCollapsed"
+          :items="[{ label: 'Dashboard', to: '/', icon: 'i-heroicons-home-20-solid', active: $route.path === '/', class: 'h-[50px]', activeClass: '!text-blue-600 !bg-blue-500 rounded-lg' }, { label: 'Warga', to: '/warga', active: $route.path === '/warga', class: 'h-[50px]', icon: 'i-heroicons-user-circle-20-solid' }]"
+          color="primary" orientation="vertical" />
+
+        <!-- <div class="space-y-1">
           <h3 :class="[
             'px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider transition-opacity duration-200',
             sidebarCollapsed ? 'lg:opacity-0' : 'opacity-100'
@@ -36,9 +41,9 @@
             <span :class="sidebarCollapsed ? 'lg:opacity-0 lg:w-0' : 'opacity-100'">Dashboard</span>
           </NuxtLink>
 
-        </div>
+        </div> -->
 
-        <div class="pt-4 mt-4 border-t border-gray-200">
+        <!-- <div class="pt-4 mt-4 border-t border-gray-200">
           <h3 :class="[
             'px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider transition-opacity duration-200',
             sidebarCollapsed ? 'lg:opacity-0' : 'opacity-100'
@@ -53,7 +58,7 @@
             </svg>
             <span :class="sidebarCollapsed ? 'lg:opacity-0 lg:w-0' : 'opacity-100'">Profile</span>
           </a>
-        </div>
+        </div> -->
       </nav>
 
       <!-- Resize Handle -->
@@ -63,6 +68,7 @@
         <div class="w-full h-full group-hover:bg-blue-500 transition-colors duration-150"></div>
       </div>
     </div>
+
 
     <!-- Mobile Sidebar Overlay -->
     <div v-if="!sidebarCollapsed"
@@ -133,7 +139,6 @@
         <div class="mx-auto">
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <slot />
-
           </div>
         </div>
       </main>

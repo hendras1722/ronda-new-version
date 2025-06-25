@@ -1,67 +1,37 @@
 <template>
-  <UAccordion
-    v-if="itemMenu.children && itemMenu.children?.length > 0"
-    :items="[itemMenu]"
-    :ui="{ wrapper: 'flex flex-col w-full text-black' }"
-    :multiple="false"
-    ref="accordion"
-    :class="itemMenu.to"
-    :defaultOpen="showOpenAccordion(itemMenu)"
-  >
+  <UAccordion v-if="itemMenu.children && itemMenu.children?.length > 0" :items="[itemMenu]"
+    :ui="{ wrapper: 'flex flex-col w-full text-black' }" :multiple="false" ref="accordion" :class="itemMenu.to"
+    :defaultOpen="showOpenAccordion(itemMenu)">
     <template #default="{ open, item, index }">
-      <UButton
-        :icon="itemMenu.icon"
-        class="dark:bg-gray-800 dark:text-white text-black w-full bg-white rounded-2xl shadow-lg"
-        :ui="{
+      <UButton :icon="itemMenu.icon"
+        class="dark:bg-gray-800 dark:text-white text-black w-full bg-white rounded-2xl shadow-lg" :ui="{
           rounded: 'rounded-none',
           padding: { sm: 'p-3' },
-        }"
-        @click="handleAccordionChildren(item.slot)"
-      >
+        }" @click="handleAccordionChildren(item.slot)">
         <span class="truncate sm:block">
           {{ itemMenu.label }}
         </span>
         <template #trailing>
-          <UIcon
-            name="i-heroicons-chevron-right-20-solid"
-            class="w-5 h-5 ms-auto transform transition-transform duration-200"
-            :class="[open && 'rotate-90']"
-          />
+          <UIcon name="i-heroicons-chevron-right-20-solid"
+            class="w-5 h-5 ms-auto transform transition-transform duration-200" :class="[open && 'rotate-90']" />
         </template>
       </UButton>
     </template>
     <template #[itemMenu.slot]="{ item }">
       <div>
-        <div
-          class="flex justify-end"
-          v-for="(itemChildren, i) in item.children"
-          :key="i"
-        >
+        <div class="flex justify-end" v-for="(itemChildren, i) in item.children" :key="i">
           <NuxtLink :to="itemChildren.to" v-slot="{ href, isActive }" custom>
-            <AccordionChildren
-              ref="accordionChildren"
-              v-if="itemChildren.children.length > 0"
-              :item-menu="itemChildren"
-            >
+            <AccordionChildren ref="accordionChildren" v-if="itemChildren.children.length > 0"
+              :item-menu="itemChildren">
             </AccordionChildren>
-            <UButton
-              v-else
-              color="royal-blue"
-              variant="ghost"
+            <UButton v-else color="royal-blue" variant="ghost"
               class="dark:bg-gray-800 dark:text-white dark:border-gray-700 text-black my-2 bg-white rounded-2xl w-full shadow-lg"
               :ui="{
                 rounded: 'rounded-none',
                 padding: { sm: 'p-3 ' },
-              }"
-              :class="[isActive && 'text-black bg-gray-200 ']"
-              @click="handlePushRouter(href)"
-            >
+              }" :class="[isActive && 'text-black bg-gray-200 ']" @click="handlePushRouter(href)">
               <span class="pl-3 flex items-center">
-                <UIcon
-                  :name="itemChildren.icon"
-                  :class="[isActive && 'text-blue-500 text-md ']"
-                  class="text-md"
-                />
+                <UIcon :name="itemChildren.icon" :class="[isActive && 'text-blue-500 text-md ']" class="text-md" />
                 <span class="sm:block ml-1 whitespace-normal">
                   {{ itemChildren.label }}
                 </span>
@@ -102,7 +72,6 @@ watch(
   () => stateLink.value,
   (newValue) => {
     if (newValue) {
-      console.log(accordion.value)
       handleAccordionChildren(route.fullPath)
     }
   }

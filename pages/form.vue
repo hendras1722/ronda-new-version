@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { object, string } from 'yup'
 import type { InferType } from 'yup'
-import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types'
+import type { FormSubmitEvent } from '@nuxt/ui'
 
 const schema = object({
   email: string().email('Invalid email').required('Required'),
@@ -32,20 +32,11 @@ async function submit(event: FormSubmitEvent<Schema>) {
         </UFormGroup>
 
         <UFormGroup label="Password" name="password" class="mt-3" required>
-          <UInput
-            v-model="state.password"
-            type="password"
-            autocomplete="false"
-          />
+          <UInput v-model="state.password" type="password" autocomplete="false" />
         </UFormGroup>
 
         <div class="flex justify-center mt-5 w-full">
-          <UButton
-            class="w-full ml-auto mr-auto block"
-            type="submit"
-            variant="solid"
-            color="blue"
-          >
+          <UButton class="w-full ml-auto mr-auto block" type="submit" variant="solid" color="primary">
             Submit
           </UButton>
         </div>

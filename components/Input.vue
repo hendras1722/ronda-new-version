@@ -46,7 +46,6 @@ const vParsing = (e: HTMLDivElement) => {
 
     if (props.parsing === 'number') {
       target.value = target.value.replace(/[a-zA-Z]|[^\dA-Za-z]/gm, '')
-      return
     }
   })
   e.addEventListener('keyup', (item) => {
@@ -58,7 +57,6 @@ const vParsing = (e: HTMLDivElement) => {
 
     if (props.parsing === 'number') {
       target.value = target.value.replace(/[a-zA-Z]|[^\dA-Za-z]/gm, '')
-      return
     }
   })
 }
