@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     const { email, password } = body
 
-    const user: { data: { id: string; email: string } } = await $fetch(
+    const user = await $fetch<{ data: { id: string; email: string } }>(
       'https://auth.syahendra.com/v1/auth/register',
       {
         method: 'POST',
@@ -20,6 +20,8 @@ export default defineEventHandler(async (event) => {
       data: {
         email: user.data.email,
         idUser: user.data.id,
+        villageId: '',
+        name: '',
       },
     })
     if (!insertedUser) {

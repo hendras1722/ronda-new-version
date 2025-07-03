@@ -1,4 +1,3 @@
-<!-- layouts/dashboard.vue -->
 <template>
   <div class="h-screen bg-gray-50 overflow-hidden">
     <!-- Sidebar -->
@@ -19,46 +18,8 @@
       <!-- Navigation Menu -->
       <nav class="flex-1 px-2 py-4 space-y-1" aria-label="Sidebar">
 
-        <UNavigationMenu :collapsed="sidebarCollapsed"
-          :items="[{ label: 'Dashboard', to: '/', icon: 'i-heroicons-home-20-solid', active: $route.path === '/', class: 'h-[50px]', activeClass: '!text-blue-600 !bg-blue-500 rounded-lg' }, { label: 'Warga', to: '/warga', active: $route.path === '/warga', class: 'h-[50px]', icon: 'i-heroicons-user-circle-20-solid' }]"
-          color="primary" orientation="vertical" />
+        <UNavigationMenu :collapsed="sidebarCollapsed" :items="items" color="primary" orientation="vertical" />
 
-        <!-- <div class="space-y-1">
-          <h3 :class="[
-            'px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider transition-opacity duration-200',
-            sidebarCollapsed ? 'lg:opacity-0' : 'opacity-100'
-          ]">
-            Data Management
-          </h3>
-
-          <NuxtLink to="/dashboard"
-            class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-150 text-white bg-blue-600">
-            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z">
-              </path>
-            </svg>
-            <span :class="sidebarCollapsed ? 'lg:opacity-0 lg:w-0' : 'opacity-100'">Dashboard</span>
-          </NuxtLink>
-
-        </div> -->
-
-        <!-- <div class="pt-4 mt-4 border-t border-gray-200">
-          <h3 :class="[
-            'px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider transition-opacity duration-200',
-            sidebarCollapsed ? 'lg:opacity-0' : 'opacity-100'
-          ]">
-            Settings
-          </h3>
-          <a href="#"
-            class="group flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-150">
-            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
-              </path>
-            </svg>
-            <span :class="sidebarCollapsed ? 'lg:opacity-0 lg:w-0' : 'opacity-100'">Profile</span>
-          </a>
-        </div> -->
       </nav>
 
       <!-- Resize Handle -->
@@ -83,8 +44,7 @@
       <!-- Top Navbar -->
       <header class="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4">
         <div class="flex items-center space-x-4">
-          <UButton icon variant="ghost" @click="toggleSidebar">
-            <UIcon name="i-heroicons-bars-3-16-solid" />
+          <UButton icon="i-heroicons-bars-3-16-solid" variant="ghost" @click="toggleSidebar">
           </UButton>
 
           <!-- Breadcrumb -->
@@ -146,7 +106,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+
+const route = useRoute()
 const sidebarCollapsed = ref(false)
 const sidebarWidth = ref(256)
 const isResizing = ref(false)
@@ -154,6 +116,7 @@ const isResizing = ref(false)
 const toggleSidebar = () => {
   sidebarCollapsed.value = !sidebarCollapsed.value
 }
+
 
 const startResize = (e) => {
   isResizing.value = true
@@ -195,4 +158,53 @@ onMounted(() => {
     window.removeEventListener('resize', handleResize)
   })
 })
+
+
+const items = computed(() => [
+  {
+    label: 'Dashboard',
+    to: '/',
+    icon: 'i-heroicons-home-20-solid',
+    active: route.path === '/',
+    class: 'h-[50px]',
+    activeClass: '!text-blue-600 !bg-blue-500 rounded-lg'
+  },
+  {
+    label: 'Warga',
+    to: '/warga',
+    active: route.path === '/warga',
+    class: 'h-[50px]',
+    icon: 'i-heroicons-user-circle-20-solid'
+  },
+  {
+    label: 'Iuran',
+    to: '/iuran',
+    active: route.path === '/iuran',
+    class: 'h-[50px]',
+    icon: 'i-heroicons-wallet-solid'
+  },
+  {
+    label: 'Ronda',
+    icon: 'i-lucide-book-open',
+    class: 'h-[50px]',
+    children: [
+      {
+        label: 'Jimpitan',
+        description: 'Fully styled and customizable components for Nuxt.',
+        icon: 'i-lucide-house',
+        class: 'h-[50px]',
+        to: '/ronda/jimpitan'
+      },
+
+      {
+        label: 'Jadwal',
+        description: 'Fully styled and customizable components for Nuxt.',
+        icon: 'i-lucide-house',
+        class: 'h-[50px]',
+        to: '/ronda/schedule'
+
+      },
+    ]
+  }
+])
 </script>

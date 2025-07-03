@@ -1,3 +1,4 @@
+import { startOfMonth, subDays } from 'date-fns'
 import prisma from '~/utils/prisma'
 
 export default defineEventHandler(async (event) => {
@@ -8,29 +9,44 @@ export default defineEventHandler(async (event) => {
     if (typeof params.villageId === 'string' && params.villageId)
       where.villageId = params.villageId
 
-    if (typeof params.search === 'string' && params.search)
-      where.OR = [{ name: { contains: params.search, mode: 'insensitive' } }]
+    if (typeof params.name === 'string' && params.name)
+      where.OR = [
+        {
+          user: {
+            name: {
+              contains: typeof params.name === 'string' ? params.name : '',
+              mode: 'insensitive',
+            },
+          },
+        },
+      ]
 
     if (params.createdAt_start && params.createdAt_end) {
       where.createdAt = {
-        gte: new Date(params.createdAt_start as string),
+        gte: subDays(startOfMonth(new Date()), 1),
         lte: new Date(params.createdAt_end as string),
       }
     }
-
-    const user = await prisma.user.findMany({
+    const getIuran = await prisma.contribution.findMany({
       where,
       select: {
         id: true,
-        name: true,
+        userId: true,
+        money: true,
+        admission: true,
         village: true,
-        email: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
         createdAt: true,
       },
     })
+
     return {
       statusCode: 200,
-      data: { user },
+      data: { iuran: getIuran },
     }
   } catch (error) {
     setResponseStatus(event, 400)
@@ -38,7 +54,7 @@ export default defineEventHandler(async (event) => {
       return {
         statusCode: 400,
         errors: {
-          message: 'Failed to get user',
+          message: 'Failed to get iuran',
           error: error.message || 'Internal Server Error',
         },
       }

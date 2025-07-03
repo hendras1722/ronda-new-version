@@ -1,5 +1,16 @@
 <template>
-  <UInput v-model="VModel" v-bind="$attrs" v-parsing />
+  <UInput v-model="VModel" v-bind="$attrs" v-parsing>
+    <template #default v-if="$slots.default">
+      <slot />
+    </template>
+    <template #leading v-if="$slots.leading">
+      <slot name="leading" />
+    </template>
+    <template #trailing v-if="$slots.trailing">
+      <slot name="trailing" />
+    </template>
+
+  </UInput>
 </template>
 
 <script setup lang="ts">
@@ -61,5 +72,3 @@ const vParsing = (e: HTMLDivElement) => {
   })
 }
 </script>
-
-<style scoped></style>

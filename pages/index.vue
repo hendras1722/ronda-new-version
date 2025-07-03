@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Selamat datang dashboard jimpitan</h1>
+    <h1>Selamat datang dashboard ronda</h1>
   </div>
 </template>
 

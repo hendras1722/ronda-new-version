@@ -1,15 +1,15 @@
 <template>
   <div>
-    <TemplatesPagesLayoutIuran v-model:params="params" :title="'Khas Warga'" :filter="filter" :data="items"
+    <TemplatesPagesLayoutJimpitan :filter="filter" v-model:params="params" :title="'Jimpitan Warga'" :data="items"
       :fields="columns" @refetch="execute">
-    </TemplatesPagesLayoutIuran>
+    </TemplatesPagesLayoutJimpitan>
   </div>
 </template>
 
 <script lang="ts" setup>
 import type { TableColumn } from '@nuxt/ui'
 import { endOfMonth, startOfMonth } from 'date-fns'
-import type { Iuran } from '~/types/iuran'
+import type { Jimpitan } from '~/types/jimpitan'
 
 const params = ref({
   search: '',
@@ -18,19 +18,9 @@ const params = ref({
     end: endOfMonth(new Date())
   }),
 })
-const items = ref<Iuran[]>([])
+const items = ref<Jimpitan[]>([])
 
 const filter = reactive({
-  search: {
-    label: 'Search',
-    placeholder: 'Search',
-    type: 'input',
-  },
-  date: {
-    label: 'Date',
-    placeholder: 'Date',
-    type: 'datepicker',
-  },
   button: {
     label: 'Add Warga',
     placeholder: 'Actions',
@@ -48,17 +38,17 @@ const filterParams = computed(() => {
   }
 })
 
-// await useHttp('/api/v1/add-iuran', {
+// await useHttp('/api/v1/add-jimpitan', {
 //   method: 'POST',
 //   body: {
-//     admission: 'Uang Masuk',
-//     userId: '5dc1214d-aa38-4be6-bc4c-86e24d1132c0',
-//     villageId: 'da11922b-260f-4c66-b08f-115510aafcea',
-//     money: '20000',
+//     villageId: "da11922b-260f-4c66-b08f-115510aafcea",
+//     block: "H12",
+//     assignId: "5dc1214d-aa38-4be6-bc4c-86e24d1132c0",
+
 //   }
 // })
 
-const { data: apiData, execute } = await useHttp<{ data: { iuran: Iuran[] } }>('/api/v1/iuran', {
+const { data: apiData, execute } = await useHttp<{ data: { jimpitan: Jimpitan[] } }>('/api/v1/jimpitan', {
   method: 'GET',
   params: filterParams,
 })
@@ -66,8 +56,9 @@ const { data: apiData, execute } = await useHttp<{ data: { iuran: Iuran[] } }>('
 watch(
   () => apiData.value,
   (newValue) => {
+    console.log(newValue)
     if (!newValue) return
-    items.value = newValue.data.iuran
+    items.value = newValue.data.jimpitan
   },
   { immediate: true }
 )
@@ -75,9 +66,8 @@ watch(
 
 const columns: TableColumn<Record<string, any>>[] = [
   { id: 'id', accessorKey: 'id', header: 'ID' },
-  { id: 'name', accessorKey: 'name', header: 'Name' },
-  { id: 'admission', accessorKey: 'admission', header: 'Penerimaan' },
-  { id: 'createdAt', accessorKey: 'createdAt', header: 'Tanggal Masuk' },
+  { id: 'block', accessorKey: 'block', header: 'Blok Rumah' },
+  { id: 'assign', accessorKey: 'assign', header: 'Name' },
   { id: 'action' }
 ]
 
