@@ -2,18 +2,14 @@ import prisma from '~/utils/prisma'
 
 export default defineEventHandler(async (event) => {
   try {
-    const body = await readBody(event)
-    const user = await prisma.user.create({
-      data: {
-        villageId: body.villageId,
-        email: body.email,
-        name: body.name,
-        // idUser: '',
-      },
+    const data = await readBody(event)
+    const create = await prisma.moneyJimpitan.create({
+      data,
     })
+
     return {
-      statusCode: 200,
-      data: { user },
+      message: 'Success',
+      data: create,
     }
   } catch (error) {
     setResponseStatus(event, 400)

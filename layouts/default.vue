@@ -107,15 +107,21 @@
 </template>
 
 <script setup lang="ts">
+import { useCallback } from '../composables/useCallback'
+
 
 const route = useRoute()
 const sidebarCollapsed = ref(false)
 const sidebarWidth = ref(256)
 const isResizing = ref(false)
 
-const toggleSidebar = () => {
+const toggleSidebar = useCallback(() => {
   sidebarCollapsed.value = !sidebarCollapsed.value
-}
+
+})
+
+// const toggleSidebar = () => {
+// }
 
 
 const startResize = (e) => {

@@ -8,14 +8,14 @@
 
 <script lang="ts" setup>
 import type { TableColumn } from '@nuxt/ui'
-import { endOfMonth, startOfMonth } from 'date-fns'
+import { endOfDay, startOfDay } from 'date-fns'
 import type { Jimpitan } from '~/types/jimpitan'
 
 const params = ref({
   search: '',
   date: useCalendar({
-    start: startOfMonth(new Date()),
-    end: endOfMonth(new Date())
+    start: startOfDay(new Date()),
+    end: endOfDay(new Date())
   }),
 })
 const items = ref<Jimpitan[]>([])
@@ -27,16 +27,28 @@ const filter = reactive({
     type: 'button',
     css: 'bg-green-500 hover:bg-green-500'
   },
+  date: {
+    label: 'Date',
+    placeholder: 'Date',
+    type: 'datepicker',
+  },
 })
 
 const filterParams = computed(() => {
   return {
-    name: params.value.search,
-    createdAt_start: params.value.date.start.toString(),
-    createdAt_end: params.value.date.end.toString(),
+    createdAt: params.value.date.start.toString(),
+    createdEnd: params.value.date.end.toString(),
     villageId: 'da11922b-260f-4c66-b08f-115510aafcea'
   }
 })
+
+const { data: apiData, execute } = await useHttp<{ data: { jimpitan: Jimpitan[] } }>('/api/v1/jimpitan', {
+  method: 'GET',
+  params: filterParams,
+})
+
+
+
 
 // await useHttp('/api/v1/add-jimpitan', {
 //   method: 'POST',
@@ -48,10 +60,7 @@ const filterParams = computed(() => {
 //   }
 // })
 
-const { data: apiData, execute } = await useHttp<{ data: { jimpitan: Jimpitan[] } }>('/api/v1/jimpitan', {
-  method: 'GET',
-  params: filterParams,
-})
+
 
 watch(
   () => apiData.value,
@@ -67,7 +76,6 @@ watch(
 const columns: TableColumn<Record<string, any>>[] = [
   { id: 'id', accessorKey: 'id', header: 'ID' },
   { id: 'block', accessorKey: 'block', header: 'Blok Rumah' },
-  { id: 'assign', accessorKey: 'assign', header: 'Name' },
   { id: 'action' }
 ]
 

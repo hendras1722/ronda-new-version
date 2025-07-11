@@ -1,8 +1,13 @@
 export interface Jimpitan {
   id: string
+  villageId: string
   village: Village
   block: string
   assign: Assign
+  take: Assign
+  money: string
+  createdAt?: Date
+  createEnd?: Date
 }
 
 export interface Assign {

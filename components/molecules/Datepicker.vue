@@ -6,7 +6,7 @@ const df = new DateFormatter('en-US', {
 })
 
 const modelValue = defineModel({
-  get(v: CalendarDate | { start: CalendarDate, end: CalendarDate }) {
+  get(v: { start: CalendarDate, end: CalendarDate }) {
     if (v instanceof CalendarDate) {
       return v
     }

@@ -1,5 +1,4 @@
 import { endOfDay, startOfDay } from 'date-fns'
-import type { Jimpitan as JimpitanType } from '~/types/jimpitan'
 import prisma from '~/utils/prisma'
 
 export default defineEventHandler(async (event) => {
@@ -7,8 +6,12 @@ export default defineEventHandler(async (event) => {
     const params: any = await getQuery(event)
     const getMoney = await prisma.moneyJimpitan.findMany({
       where: {
-        id: params.id,
-        villageId: params.villageId || '',
+        AND: [
+          {
+            block: { mode: 'insensitive', contains: params.block },
+            villageId: params.villageId,
+          },
+        ],
         createdAt: {
           gte: startOfDay(new Date(params.createdAt)),
           lte: endOfDay(new Date(params.createdEnd)),
@@ -24,41 +27,9 @@ export default defineEventHandler(async (event) => {
         block: true,
       },
     })
-
-    const getJimpitan = await prisma.jimpitan.findMany({
-      where: {
-        villageId: params.villageId || '',
-      },
-      select: {
-        id: true,
-        village: true,
-        block: true,
-        // assign: true,
-      },
-    })
-
-    const result = getJimpitan.map((jimpitan) => {
-      if (getMoney.length > 0) {
-        const money = getMoney.find(
-          (money) => money.block.toLowerCase() === jimpitan.block.toLowerCase()
-        )
-        console.log(money, 'inimoney')
-        return {
-          ...jimpitan,
-          money: money ? money.money : 0,
-          take: money ? money.user : null,
-        }
-      }
-      return {
-        ...jimpitan,
-        money: 0,
-        take: 0,
-      }
-    })
-
     return {
       statusCode: 200,
-      data: { jimpitan: result },
+      data: { jimpitan: getMoney },
     }
   } catch (error) {
     setResponseStatus(event, 400)

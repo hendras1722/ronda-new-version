@@ -17,8 +17,7 @@
       </template>
     </AtomsModal>
     <UButton @click="emits('actions')" class="text-nowrap" color="success" v-if="Object.keys(filter).includes('add')">
-      Add
-      new</UButton>
+      Add new</UButton>
   </div>
 </template>
 

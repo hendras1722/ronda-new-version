@@ -47,6 +47,7 @@ watch(
   () => apiData.value,
   (newValue) => {
     if (!newValue) return
+    console.log(newValue)
     items.value = newValue.data.user
   },
   { immediate: true }
