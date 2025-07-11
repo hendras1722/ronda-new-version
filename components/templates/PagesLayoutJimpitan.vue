@@ -207,7 +207,7 @@ async function getDetail(e: string) {
           user: {
             name: ''
           },
-          block: '',
+          block: e,
         },
         createdAt: createdDate.toISOString()
       }
