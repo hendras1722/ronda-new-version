@@ -1,5 +1,5 @@
 {
-  "buildCommand": "prisma generate && nuxt build",
+  "buildCommand": "npx prisma generate && nuxt build",
   "installCommand": "npm install",
   "outputDirectory": ".output"
 }
