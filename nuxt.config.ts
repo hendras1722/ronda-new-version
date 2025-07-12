@@ -43,5 +43,11 @@ export default defineNuxtConfig({
     preference: 'light',
   },
 
+  nitro: {
+    externals: {
+      inline: ['@prisma/client', '.prisma'],
+    },
+  },
+
   compatibilityDate: '2025-01-14',
 })
