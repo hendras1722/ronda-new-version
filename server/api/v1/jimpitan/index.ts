@@ -1,7 +1,7 @@
 import { endOfDay, startOfDay } from 'date-fns'
-import type { Jimpitan as JimpitanType } from '~/types/jimpitan'
-import prisma from '~/utils/prisma'
+import { PrismaClient } from '@prisma/client'
 
+const prisma = new PrismaClient()
 export default defineEventHandler(async (event) => {
   try {
     const params: any = await getQuery(event)
