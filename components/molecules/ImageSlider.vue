@@ -29,7 +29,7 @@
           </span>
         </div>
         <div v-else-if="items.length === 1" v-for="imageIndex in [0]"
-          :key="getImageUrl(currentSetIndex + imageIndex)?.block + 'else'"
+          :key="getImageUrl(currentSetIndex + imageIndex)?.block + 'ifelse'"
           class="relative transition-all duration-500 ease-in-out">
           <UIcon :name="'i-ion-ios-home'" class="lg:text-[308px] text-[62px] transition-all duration-500 ease-in-out"
             :class="['month-button', { active: isActiveImage(imageIndex), 'lg:w-48 text-gray-300 scale-75 opacity-50': !isActiveImage(imageIndex) }]">
@@ -50,6 +50,7 @@
           </span>
         </div>
         <div v-else="items.length > 2" v-for="imageIndex in [-1, 0, 1]"
+          :key="getImageUrl(currentSetIndex + imageIndex)?.block + 'else'"
           class="relative transition-all duration-500 ease-in-out">
           <UIcon :name="'i-ion-ios-home'" class="lg:text-[308px] text-[62px] transition-all duration-500 ease-in-out"
             :class="['month-button', { active: isActiveImage(imageIndex), 'lg:w-48 text-gray-300 scale-75 opacity-50': !isActiveImage(imageIndex) }]">
