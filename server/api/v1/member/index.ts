@@ -1,6 +1,7 @@
-import prisma from '~/utils/prisma';
+import prisma from '~/utils/prisma'
 
 export default defineEventHandler(async (event) => {
+  try {
     const params = getQuery(event)
     const where: { villageId?: string; OR?: any; createdAt?: any } = {}
 
