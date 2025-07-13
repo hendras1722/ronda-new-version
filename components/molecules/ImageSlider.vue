@@ -49,7 +49,7 @@
             {{ getImageUrl(currentSetIndex + imageIndex)?.block }}
           </span>
         </div>
-        <div v-if="items.length > 2" v-for="imageIndex in [0]" :key="getImageUrl(currentSetIndex + imageIndex)?.block"
+        <div v-else="items.length > 2" v-for="imageIndex in [-1, 0, 1]"
           class="relative transition-all duration-500 ease-in-out">
           <UIcon :name="'i-ion-ios-home'" class="lg:text-[308px] text-[62px] transition-all duration-500 ease-in-out"
             :class="['month-button', { active: isActiveImage(imageIndex), 'lg:w-48 text-gray-300 scale-75 opacity-50': !isActiveImage(imageIndex) }]">
@@ -91,7 +91,7 @@ const numImages = computed(() => props.items.length);
 const getImageUrl = (index: number) => {
   if (!props.items || props.items.length === 0) return { block: '' };
   const adjustedIndex = (index + numImages.value) % numImages.value;
-  return props.items[adjustedIndex];
+  return props.items[adjustedIndex] as { block: string };
 };
 
 const changeImage = (direction: number) => {
