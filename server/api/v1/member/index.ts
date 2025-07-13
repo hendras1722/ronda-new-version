@@ -1,8 +1,6 @@
-import { PrismaClient } from '~/generated/prisma'
+import prisma from '~/utils/prisma';
 
-const prisma = new PrismaClient()
 export default defineEventHandler(async (event) => {
-  try {
     const params = getQuery(event)
     const where: { villageId?: string; OR?: any; createdAt?: any } = {}
 
