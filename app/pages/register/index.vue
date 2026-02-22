@@ -68,7 +68,7 @@
         <!-- Footer -->
         <div class="mt-6 text-center">
           <p class="text-xs text-gray-500">
-            © 2026 Perumahan Griya Pratama Asri 2
+            © 2026 Griya Pratama Asri 2
           </p>
         </div>
       </UCard>

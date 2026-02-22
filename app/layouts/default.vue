@@ -5,5 +5,7 @@ const getMe = computed(() => me.me?.data)
 </script>
 
 <template>
-  <slot :getMe="getMe" />
+  <div>
+    <slot :get-me="getMe" />
+  </div>
 </template>

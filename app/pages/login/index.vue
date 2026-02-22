@@ -12,7 +12,7 @@
         <template #header>
           <div class="text-center space-y-1">
             <h1 class="text-2xl font-semibold text-orange-700 tracking-wide">
-              Perumahan Griya Pratama Asri 2
+              Griya Pratama Asri 2
             </h1>
             <p class="text-sm text-gray-500">
               Sistem Ronda
@@ -47,7 +47,7 @@
         <!-- Footer -->
         <div class="mt-6 text-center">
           <p class="text-xs text-gray-500">
-            © 2026 Perumahan Griya Pratama Asri 2
+            © 2026 Griya Pratama Asri 2
           </p>
         </div>
       </UCard>
