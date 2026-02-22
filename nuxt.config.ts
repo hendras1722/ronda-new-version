@@ -23,7 +23,7 @@ export default defineNuxtConfig({
     colorMode: false
   },
   nitro: {
-    preset: 'bun',
+    preset: 'vercel',
     experimental: {
       database: true
     }
