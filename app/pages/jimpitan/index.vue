@@ -132,7 +132,7 @@ const stateJimpitan = reactive<{
   money: string
 }>({
   idBlock: undefined,
-  money: '',
+  money: '1000',
 })
 
 async function handleSubmit() {
@@ -256,8 +256,8 @@ function shareToWA() {
             <USelectMenu v-model="stateJimpitan.idBlock" :items="ListSelectBlocks" value-attribute="value"
               class="min-w-[80px] max-w-[120px]" placeholder="Pilih Block" />
           </UFormField>
-          <UFormField label="Money" class="w-full">
-            <InputCurrency v-model="stateJimpitan.money" placeholder="Money" class="w-full" />
+          <UFormField label="Uang" class="w-full">
+            <InputCurrency v-model="stateJimpitan.money" placeholder="Uang" class="w-full" />
           </UFormField>
         </div>
         <UPopover>

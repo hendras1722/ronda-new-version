@@ -32,7 +32,7 @@
               icon="i-heroicons-lock-closed" />
           </UFormField>
 
-          <UButton block size="lg" color="primary"
+          <UButton block size="lg" color="primary" :disabled="pending" :loading="pending"
             class="relative overflow-hidden transition-transform duration-300 hover:scale-[1.02]" @click="handleSubmit">
             <span class="relative z-10">Masuk</span>
             <span
@@ -68,7 +68,7 @@ const state = reactive({
   password: ''
 })
 
-const { data, execute } = await useFetch<Response<{ token: string }>>('/api/login', {
+const { data, execute, pending } = await useFetch<Response<{ token: string }>>('/api/login', {
   method: 'POST',
   body: state,
   watch: false,

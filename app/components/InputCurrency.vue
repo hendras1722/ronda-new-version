@@ -48,11 +48,37 @@ const handleInput = (event: Event) => {
   emit('update:modelValue', parsed)
 }
 
+const handleKeydown = (event: KeyboardEvent) => {
+  const target = event.target as HTMLInputElement
+  const cursorPos = target.selectionStart ?? 0
+
+  if (event.key === 'Backspace') {
+    const charBefore = displayValue.value[cursorPos - 1]
+    if (charBefore === '.') {
+      event.preventDefault()
+      nextTick(() => {
+        target.setSelectionRange(cursorPos - 1, cursorPos - 1)
+      })
+    }
+  }
+
+  if (event.key === 'Delete') {
+    const charAfter = displayValue.value[cursorPos]
+    if (charAfter === '.') {
+      event.preventDefault()
+      nextTick(() => {
+        target.setSelectionRange(cursorPos + 1, cursorPos + 1)
+      })
+    }
+  }
+}
+
 const computedClass = computed(() => props.class)
 </script>
 
 <template>
-  <UInput :model-value="displayValue" :class="computedClass" @input="handleInput" v-bind="$attrs">
+  <UInput :model-value="displayValue" :class="computedClass" v-bind="$attrs" @input="handleInput"
+    @keydown="handleKeydown">
     <template #leading>
       <span class="text-gray-500">{{ props.prefix }}</span>
     </template>

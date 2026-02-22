@@ -52,7 +52,7 @@
               :value-key="'value'" />
           </UFormField>
 
-          <UButton size="lg" color="primary"
+          <UButton size="lg" color="primary" :disabled="pending" :loading="pending"
             class="relative overflow-hidden transition-transform duration-300 hover:scale-[1.02] w-full justify-center"
             @click="handleSubmit">
             <span class="relative z-10">Daftar</span>
@@ -106,7 +106,7 @@ const listBlocks = computed(() => {
   })
 })
 
-const { execute, error, data } = await useFetch<Response<{ message: string }>>('/api/register', {
+const { execute, error, data, pending } = await useFetch<Response<{ message: string }>>('/api/register', {
   method: 'POST',
   body: state,
   watch: false,
