@@ -33,10 +33,18 @@ interface JimpitanUpdate extends Jimpitan {
   block: { name: string }
 }
 
+export interface LaporanDashboard {
+  inbound: number
+  outbound: number
+  totalJimpitan: number
+  allTotal: number
+}
+
+
 
 const token = useCookie('token')
 const listDay = [{ label: 'Minggu', value: '0' }, { label: 'Senin', value: '1' }, { label: 'Selasa', value: '2' }, { label: 'Rabu', value: '3' }, { label: 'Kamis', value: '4' }, { label: 'Jumat', value: '5' }, { label: 'Sabtu', value: '6' }]
-const dayNow = new Date().getDay()
+// const dayNow = new Date().getDay()
 const today = new Date();
 const year = today.getFullYear();
 const month = today.getMonth() + 1;
@@ -52,7 +60,7 @@ const df = new DateFormatter('en-US', {
 })
 
 
-const listDayNow = listDay.filter(item => item.value === dayNow.toString())
+// const listDayNow = listDay.filter(item => item.value === dayNow.toString())
 
 const columns: TableColumn<RondaUpdate>[] = [
   {
@@ -62,7 +70,7 @@ const columns: TableColumn<RondaUpdate>[] = [
 ]
 
 
-const columnsJimpitan: TableColumn<Record<string, any>>[] = [
+const columnsJimpitan: TableColumn<Blocks>[] = [
   {
     accessorKey: 'name',
     header: 'Blok',
@@ -89,19 +97,26 @@ const resultSchedule = computed(() => {
   return group
 })
 
-const { data: blocks, error } = await useFetch<Response<Blocks[]>>('/api/blocks/multiple', {
+const { data: blocks } = await useFetch<Response<Blocks[]>>('/api/blocks/multiple', {
   method: 'GET',
-  // query: paramsFilterBlocks,
   headers: {
     'Authorization': `Bearer ${token.value}`
   }
 })
 
-
 const query = computed(() => {
   return {
     start: modelValue.value.start?.toString(),
     end: modelValue.value.end?.toString()
+  }
+})
+
+
+const { data: laporanFee } = await useFetch<Response<LaporanDashboard>>('/api/incoming/dashboard', {
+  method: 'GET',
+  query,
+  headers: {
+    'Authorization': `Bearer ${token.value}`
   }
 })
 
@@ -168,28 +183,34 @@ const listBlocks = computed(() => {
           </UPopover>
         </div>
 
-        <div class="grid md:grid-cols-2 grid-cols-1 grid-rows-1 gap-4 mt-4 w-full">
+        <div class="grid md:grid-cols-3 grid-cols-1 grid-rows-1 gap-4 mt-4 w-full">
           <UCard>
             <template #header>
               <div>Total uang masuk</div>
             </template>
-            <div class="text-xl font-bold">Rp 0</div>
+            <div class="text-xl font-bold">Rp {{ laporanFee?.data.inbound.toLocaleString('id-ID') }}</div>
           </UCard>
           <UCard>
             <template #header>
               <div>Total uang keluar</div>
             </template>
-            <div class="text-xl font-bold">Rp 0</div>
+            <div class="text-xl font-bold">Rp {{ laporanFee?.data.outbound.toLocaleString('id-ID') }}</div>
+          </UCard>
+          <UCard>
+            <template #header>
+              <div>Total uang</div>
+            </template>
+            <div class="text-xl font-bold">Rp {{ laporanFee?.data.allTotal.toLocaleString('id-ID') }}</div>
+            <small>Termasuk jimpitan</small>
           </UCard>
         </div>
         <div class="grid md:grid-cols-3 grid-cols-1 grid-rows-1 gap-4 mt-4 w-full">
           <div class="col-span-2">
             <UCard>
               <template #header>
-                <div>Jimpitan</div>
+                <div>Jimpitan ({{ laporanFee?.data.totalJimpitan.toLocaleString('id-ID') }})</div>
               </template>
-              <UTable :data="listBlocks" :columns="columnsJimpitan" class="flex-1">
-              </UTable>
+              <UTable :data="listBlocks" :columns="columnsJimpitan" class="flex-1" />
             </UCard>
           </div>
           <UCard :ui="{

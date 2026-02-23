@@ -9,8 +9,8 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event)
 
 
-    const filter: Record<string, any> = {}
-
+    const filter: Record<string, unknown> = {}
+    console.log(query)
     if (query.start && query.end) {
       const start = new Date(query.start as string)
       start.setHours(0, 0, 0, 0)
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
       const end = new Date(query.end as string)
       end.setHours(23, 59, 59, 999)
 
-      filter.createdAt = {
+      filter.date = {
         $gte: start,
         $lte: end,
       }

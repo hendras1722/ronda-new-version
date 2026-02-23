@@ -9,12 +9,13 @@ export default defineEventHandler(async (event) => {
     }
 
     const body = await readBody(event)
-    const { amount, idUser, description, date } = body
+    const { amount, idUser, description, date, type } = body
     const create = await IncomingSchema.create({
       amount,
       idUser,
       description,
-      date
+      date,
+      type
     })
     return helperResponseSuccess('Create incoming success', create)
   } catch (error) {

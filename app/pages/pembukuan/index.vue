@@ -7,12 +7,17 @@
           <UButton label="Tambah" color="primary" variant="solid" @click="openModal = true" />
 
           <template #content>
-            <UForm @submit="onSubmit" :state="state" class="p-5 flex flex-col gap-2">
+            <UForm :state="state" class="p-5 flex flex-col gap-2" @submit="onSubmit">
               <UFormField label="Uang dari" name="idUser">
-                <USelectMenu class="w-full" v-model="state.idUser" :items="members" value-key="value" />
+                <USelectMenu v-model="state.idUser" class="w-full" :items="members" value-key="value" />
               </UFormField>
               <UFormField label="Jumlah" name="amount">
-                <InputCurrency class="w-full" v-model="state.amount" />
+                <InputCurrency v-model="state.amount" class="w-full" />
+              </UFormField>
+              <UFormField label="Jenis" name="type">
+                <USelectMenu v-model="state.type" class="w-full"
+                  :items="[{ label: 'Uang Masuk', value: 'inbound' }, { label: 'Uang Keluar', value: 'outbound' }]"
+                  value-key="value" />
               </UFormField>
               <UFormField label="Tanggal" name="date">
                 <UPopover>
@@ -20,12 +25,12 @@
                     {{ modelValue ? df.format(modelValue.toDate(getLocalTimeZone())) : 'Select a date' }}
                   </UButton>
                   <template #content>
-                    <UCalendar v-model="modelValue" class="p-2" />
+                    <UCalendar v-model="modelValue" :min-value="minDate" class="p-2" />
                   </template>
                 </UPopover>
               </UFormField>
               <UFormField label="Deskripsi" name="description">
-                <UInput class="w-full" v-model="state.description" />
+                <UInput v-model="state.description" class="w-full" />
               </UFormField>
               <div class="flex justify-center flex-col">
                 <UButton class="mt-5 justify-center" type="submit" label="Simpan" color="primary" variant="solid" />
@@ -38,13 +43,32 @@
       </div>
     </template>
 
+    <UPopover>
+      <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
+        <template v-if="modelValueRange.start">
+          <template v-if="modelValueRange.end">
+            {{ df.format(modelValueRange.start.toDate(getLocalTimeZone())) }} - {{
+              df.format(modelValueRange.end.toDate(getLocalTimeZone())) }}
+          </template>
+
+          <template v-else>
+            {{ df.format(modelValueRange.start.toDate(getLocalTimeZone())) }}
+          </template>
+        </template>
+        <template v-else>
+          Pick a date
+        </template>
+      </UButton>
+
+      <template #content>
+        <UCalendar v-model="modelValueRange" class="p-2" :number-of-months="2" range />
+      </template>
+    </UPopover>
+
     <UTable :data="incomingList?.data ?? []" :columns="columns">
       <template #date-cell="{ row }">
         {{ df.format(new Date(row.original.date ?? '')) }}
       </template>
-      <!-- <template #amount-cell="{ row }">
-          {{ formatCurrency(row.original.amount ?? '') }}
-        </template> -->
 
       <template #actions-cell="{ row }">
         <UButton color="error" variant="solid" label="Hapus" @click="() => {
@@ -95,14 +119,38 @@ useHead({
   title: 'Pembukuan | Ronda GPA'
 })
 
+
+
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth() + 1;
+
+const lastDay = new Date(year, month, 0).getDate();
+
 const token = useCookie<string>('token')
 const openModal = ref(false)
 const state = reactive({
   amount: '',
-  date: '',
+  date: new CalendarDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toString(),
   description: '',
-  idUser: ''
+  idUser: '',
+  type: ''
 })
+
+const modelValueRange = shallowRef({
+  start: new CalendarDate(year, month, 1),
+  end: new CalendarDate(year, month, lastDay)
+})
+
+
+const query = computed(() => {
+  return {
+    start: modelValueRange.value.start?.toString(),
+    end: modelValueRange.value.end?.toString()
+  }
+})
+
+const minDate = new CalendarDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate())
 
 const columns: TableColumn<IncomingExtends>[] = [
   {
@@ -116,6 +164,13 @@ const columns: TableColumn<IncomingExtends>[] = [
   {
     accessorKey: 'date',
     header: 'Tanggal',
+  },
+  {
+    accessorKey: 'type',
+    header: 'Jenis',
+    cell: ({ row }) => {
+      return row.original.type === 'inbound' ? 'Uang Masuk' : 'Uang Keluar'
+    }
   },
   {
     accessorKey: 'description',
@@ -146,6 +201,7 @@ const df = new DateFormatter('en-US', {
 const modelValue = shallowRef(new CalendarDate(2022, 1, 10))
 
 const { data: incomingList, execute: refetchIncoming } = await useFetch<Response<IncomingExtends[]>>("/api/incoming", {
+  query,
   headers: {
     Authorization: `Bearer ${token.value}`
   }
@@ -158,7 +214,7 @@ watch(modelValue, (value) => {
 })
 
 async function onSubmit() {
-  const { data, error, execute } = await useFetch<Response<Incoming>>('/api/incoming/create', {
+  const { error, execute } = await useFetch<Response<Incoming>>('/api/incoming/create', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token.value}`
@@ -174,7 +230,7 @@ async function onSubmit() {
     return
   }
   state.amount = ''
-  state.date = ''
+  state.date = new CalendarDate(new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()).toString()
   state.description = ''
   state.idUser = ''
   openModal.value = false
@@ -191,7 +247,7 @@ async function deleteIncoming(id: string) {
     title: "Hapus Data",
     description: "Apakah anda yakin ingin menghapus data ini?",
     onConfirm: async () => {
-      const { data, error, execute } = await useFetch<Response<Incoming>>(`/api/incoming/delete`, {
+      const { error, execute } = await useFetch<Response<Incoming>>(`/api/incoming/delete`, {
         method: 'DELETE',
         query: {
           id
