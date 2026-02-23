@@ -1,23 +1,26 @@
 <template>
-
   <div class="px-4">
-    <UModal>
-      <UButton v-if="['super_admin', 'ketua'].includes(getMe?.role)" color="primary">Tambah Ronda</UButton>
+    <div class="flex gap-4">
+      <UModal>
+        <UButton v-if="['super_admin', 'ketua'].includes(getMe?.role)" color="primary">Tambah Ronda</UButton>
 
-      <template #content="{ close }">
-        <div class="p-4">
-          <UForm :state="state" @submit="createSchedule(close)">
-            <UFormField label="Nama Warga" name="idUser">
-              <USelectMenu v-model="state.idUser" class="w-full" :items="resultMember" value-key="value" />
-            </UFormField>
-            <UFormField label="Hari" name="days" class="mt-2">
-              <USelectMenu v-model="state.days" class="w-full" :items="listDay" value-key="value" />
-            </UFormField>
-            <UButton class="mt-4 w-full justify-center" type="submit">Simpan</UButton>
-          </UForm>
-        </div>
-      </template>
-    </UModal>
+        <template #content="{ close }">
+          <div class="p-4">
+            <UForm :state="state" @submit="createSchedule(close)">
+              <UFormField label="Nama Warga" name="idUser">
+                <USelectMenu v-model="state.idUser" class="w-full" :items="resultMember" value-key="value" />
+              </UFormField>
+              <UFormField label="Hari" name="days" class="mt-2">
+                <USelectMenu v-model="state.days" class="w-full" :items="listDay" value-key="value" />
+              </UFormField>
+              <UButton class="mt-4 w-full justify-center" type="submit">Simpan</UButton>
+            </UForm>
+          </div>
+        </template>
+      </UModal>
+      <UButton label="Ambil Jimpitan" to="/ambil" leading-icon="i-lucide-git-pull-request-draft" color="info" />
+
+    </div>
 
     <div class="grid md:grid-cols-3 grid-cols-1 grid-rows-1 gap-4 mt-4">
       <UCard v-for="(item, index) in listDay" :key="index + item.label" :ui="{

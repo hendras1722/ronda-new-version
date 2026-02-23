@@ -14,7 +14,7 @@ export const JimpitanSchema = defineMongooseModel<Jimpitan>({
   name: "Jimpitan",
   schema: {
     idJimpitan: { type: String, required: true, index: true, default: uuidv4, unique: true },
-    idUser: { type: String, required: true, unique: true, ref: 'User' },
+    idUser: { type: String, required: true, index: true, ref: 'User' },
     money: { type: String, required: true },
     idBlock: { type: String, required: true, ref: 'Block' },
     createdAt: { type: Date, default: Date.now },
