@@ -23,7 +23,19 @@ export default defineEventHandler(async (event) => {
       setResponseStatus(event, 404)
       return helperResponseError("Blocks not found")
     }
-    const blocksObj = blocks.map((block) => block.toObject())
+    const blocksObj = blocks.map((block) => block.toObject()).sort((a, b) => {
+      const letterA = a.name.match(/[A-Z]+/i)?.[0] || ""
+      const numberA = parseInt(a.name.match(/\d+/)?.[0] || "0")
+
+      const letterB = b.name.match(/[A-Z]+/i)?.[0] || ""
+      const numberB = parseInt(b.name.match(/\d+/)?.[0] || "0")
+
+      if (letterA !== letterB) {
+        return letterA.localeCompare(letterB)
+      }
+
+      return numberA - numberB
+    })
     return helperResponseSuccess("Get blocks success", blocksObj)
   } catch (error) {
     console.log(error)

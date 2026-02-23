@@ -1,6 +1,6 @@
 <template>
   <div class="h-svh overflow-y-auto bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-4">
-    <div v-if="getMe?.ronda.days !== String(dayNow)"
+    <div v-if="getMe?.ronda?.days !== String(dayNow)"
       class="flex flex-col items-center justify-center gap-5 min-h-[80vh]">
       <div class="text-center text-2xl font-bold">Jadwal rondamu bukan hari ini</div>
       bisa diliat di halaman ronda

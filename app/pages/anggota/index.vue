@@ -52,42 +52,43 @@
               </UBadge>
             </template>
             <template #block-cell="{ row }">
-              <span class="font-medium text-slate-700">{{ row.original.block.name }}</span>
+              <span class="font-medium text-slate-700">{{ row.original.block?.name }}</span>
             </template>
             <template #actions-cell="{ row }">
               <div class="flex items-center gap-2">
-                <UButton @click="redirectToWA(row.original.phone, row.original.name)" aria-label="Whatsapp"
-                  v-if="row.original.phone" variant="ghost" size="xl" icon="uim:whatsapp" class="p-0" :ui="{
+                <UButton v-if="row.original.phone" aria-label="Whatsapp" variant="ghost" size="xl" icon="uim:whatsapp"
+                  class="p-0" :ui="{
                     leadingIcon: 'w-8 h-8',
-                  }" />
+                  }" @click="redirectToWA(row.original.phone, row.original.name)" />
                 <template v-if="['ketua', 'bendahara', 'seketaris', 'super_admin'].includes(getMe?.role)">
-                  <UButton v-if="!['super_admin'].includes(row.original.role)" @click="() => {
-                    state.email = row.original.email
-                    state.name = row.original.name
-                    state.phone = row.original.phone
-                    state.idBlock = row.original.idBlock
-                    navigateTo(`/anggota?id=${row.original.idUser}`)
-                    isEdit = true
-                    openModal = true
-                  }" aria-label="Edit" color="secondary" :size="'lg'" icon="i-lucide-edit" class="p-0" :ui="{
-                    leadingIcon: 'w-5 h-5 m-1',
-                  }" />
+                  <UButton v-if="!['ketua'].includes(row.original.role)" aria-label="Edit" color="secondary"
+                    :size="'lg'" icon="i-lucide-edit" class="p-0" :ui="{
+                      leadingIcon: 'w-5 h-5 m-1',
+                    }" @click="() => {
+                      state.email = row.original.email
+                      state.name = row.original.name
+                      state.phone = row.original.phone
+                      state.idBlock = row.original.idBlock
+                      navigateTo(`/anggota?id=${row.original.idUser}`)
+                      isEdit = true
+                      openModal = true
+                    }" />
                   <UButton v-if="getMe.idUser !== row.original.idUser && !['super_admin'].includes(row.original.role)"
-                    @click="() => {
+                    aria-label="Delete" color="error" :size="'lg'" icon="i-lucide-trash" class="p-0" :ui="{
+                      leadingIcon: 'w-5 h-5 m-1',
+                    }" @click="() => {
                       confirm.open({
                         title: 'Delete Member',
                         description: 'Are you sure you want to delete this member?',
                         onConfirm: () => deleteMember(row.original.idUser)
                       })
-                    }" aria-label="Delete" color="error" :size="'lg'" icon="i-lucide-trash" class="p-0" :ui="{
-                      leadingIcon: 'w-5 h-5 m-1',
                     }" />
                   <UButton
                     v-if="['ketua', 'super_admin'].includes(getMe?.role) && !['super_admin'].includes(row.original.role)"
-                    @click="() => {
+                    color="info" :size="'lg'" label="Update pengurus" @click="() => {
                       router.push(`/anggota?id=${row.original.idUser}`)
                       openModalRole = true
-                    }" color="info" :size="'lg'" label="Update pengurus" />
+                    }" />
                 </template>
               </div>
             </template>
@@ -100,14 +101,14 @@
 
     <UModal v-model:open="openModalRole">
       <template #content="{ close }">
-        <UForm @submit="updateRole" :state="stateRole" class="p-4 flex flex-col gap-4">
+        <UForm :state="stateRole" class="p-4 flex flex-col gap-4" @submit="updateRole">
           <UFormField label="Jabatan" required>
             <USelectMenu v-model="stateRole.role"
               :items="[{ label: 'Ketua', value: 'ketua' }, { label: 'Bendahara', value: 'bendahara' }, { label: 'Seketaris', value: 'seketaris' }, { label: 'Anggota', value: 'user' }]"
               value-key="value" placeholder="Pilih jabatan" class="w-full" />
           </UFormField>
           <UButton type="submit" class="justify-center">Submit</UButton>
-          <UButton type="reset" @click="close" class="justify-center" variant="ghost" color="neutral">
+          <UButton type="reset" class="justify-center" variant="ghost" color="neutral" @click="close">
             Cancel
           </UButton>
         </UForm>
@@ -118,21 +119,23 @@
         <div class="p-5" @submit.prevent="onSubmit">
           <UForm class="flex flex-col gap-4" required>
             <UFormField label="Nama">
-              <UInput class="w-full" v-model="state.name" placeholder="Name" />
+              <UInput v-model="state.name" class="w-full" placeholder="Name" />
             </UFormField>
             <UFormField label="Nomor Hp / Whatsapp" required>
-              <UInput class="w-full" v-model="state.phone" placeholder="Phone" />
+              <UInput v-model="state.phone" class="w-full" placeholder="Phone" />
             </UFormField>
             <UFormField label="Email" required>
-              <UInput class="w-full" v-model="state.email" placeholder="Email" />
+              <UInput v-model="state.email" class="w-full" placeholder="Email" />
             </UFormField>
             <UFormField label="Blocks" required>
-              <USelectMenu class="w-full" v-model="state.idBlock" :items="listBlocks" value-key="value" />
+              <USelectMenu v-model="state.idBlock" class="w-full" :items="listBlocks" value-key="value" />
             </UFormField>
-            <UButton type="submit" class="justify-center">Submit</UButton>
-            <UButton variant="ghost" color="neutral" type="reset" @click="close" class="justify-center">
-              Cancel
-            </UButton>
+            <div class="flex flex-col gap-2">
+              <UButton type="submit" class="justify-center">Submit</UButton>
+              <UButton variant="ghost" color="neutral" type="reset" class="justify-center" @click="close">
+                Cancel
+              </UButton>
+            </div>
           </UForm>
         </div>
       </template>
@@ -160,10 +163,11 @@
                 class="w-full" />
             </UFormField>
 
-            <div class="flex items-center gap-3 pt-4">
-              <UButton type="submit" class="flex-1 justify-center">{{ isEdit ? 'Simpan Perubahan' : 'Tambah' }}
+            <div class="flex flex-col w-full items-center gap-3 pt-4">
+              <UButton type="submit" class="flex-1 w-full justify-center">{{ isEdit ? 'Simpan Perubahan' : 'Tambah' }}
               </UButton>
-              <UButton variant="ghost" color="neutral" type="button" @click="close" class="flex-1 justify-center">
+              <UButton variant="ghost" color="neutral" type="button" class="flex-1 w-full justify-center"
+                @click="close">
                 Batal
               </UButton>
             </div>
