@@ -72,6 +72,8 @@ useHead({
 definePageMeta({
   layout: 'admin',
   activeMenu: ['ronda'],
+  permission: ['*'],
+
   breadcrumb: [
     {
       label: 'Ronda',

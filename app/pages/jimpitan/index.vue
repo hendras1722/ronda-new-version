@@ -21,6 +21,7 @@ useHead({
 definePageMeta({
   layout: 'admin',
   activeMenu: ['jimpitan'],
+  permission: ['*'],
   breadcrumb: [
     {
       label: 'Jimpitan',

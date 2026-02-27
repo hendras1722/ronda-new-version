@@ -187,6 +187,7 @@ import type { Login } from '~~/server/models/login.schema'
 definePageMeta({
   layout: 'admin',
   activeMenu: ['warga'],
+  permission: ['*']
 })
 
 useHead({

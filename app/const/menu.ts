@@ -3,37 +3,43 @@ export const MENU = [
     id: 'laporan',
     label: 'Laporan',
     to: '/laporan',
-    icon: 'i-line-md-file-filled'
+    icon: 'i-line-md-file-filled',
+    permission: ['*']
   },
   {
     id: 'warga',
     label: 'Warga',
     to: '/anggota',
-    icon: 'i-line-md-account-small'
+    icon: 'i-line-md-account-small',
+    permission: ['*']
   },
   {
     id: 'jimpitan',
     label: 'Jimpitan',
     to: '/jimpitan',
-    icon: 'i-line-md-square-filled'
+    icon: 'i-line-md-square-filled',
+    permission: ['*']
   },
   {
     id: 'ronda',
     label: 'Jadwal Ronda',
     to: '/ronda',
-    icon: 'i-line-md-sunny-filled-loop-to-moon-filled-alt-loop-transition'
+    icon: 'i-line-md-sunny-filled-loop-to-moon-filled-alt-loop-transition',
+    permission: ['*']
   },
   {
     id: 'verification',
     label: 'Verifikasi Warga',
     to: '/verification',
-    icon: 'i-line-md-folder-check-filled'
+    icon: 'i-line-md-folder-check-filled',
+    permission: ['ketua', 'super_admin']
   },
   {
     id: 'pembukuan',
     label: 'Pembukuan',
     to: '/pembukuan',
-    icon: 'i-line-md-text-box-twotone-to-text-box-multiple-twotone-transition'
+    icon: 'i-line-md-text-box-twotone-to-text-box-multiple-twotone-transition',
+    permission: ['bendahara', 'super_admin', 'ketua']
   },
 ];
 

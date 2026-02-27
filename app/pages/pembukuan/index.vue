@@ -112,7 +112,8 @@ definePageMeta({
       label: 'Pembukuan',
       to: '/pembukuan'
     }
-  ]
+  ],
+  permission: ['seketaris']
 })
 
 useHead({

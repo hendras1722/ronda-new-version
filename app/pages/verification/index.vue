@@ -10,8 +10,8 @@
         </template>
         <template #actions-cell="{ row }">
           <div class="flex gap-2">
-            <UButton @click="onAction('reject', row.original.idUser)" label="Tolak" color="error" variant="solid" />
-            <UButton @click="onAction('accept', row.original.idUser)" label="Terima" color="primary" variant="solid" />
+            <UButton label="Tolak" color="error" variant="solid" @click="onAction('reject', row.original.idUser)" />
+            <UButton label="Terima" color="primary" variant="solid" @click="onAction('accept', row.original.idUser)" />
           </div>
         </template>
       </UTable>
@@ -32,6 +32,8 @@ interface Register extends Login {
 definePageMeta({
   layout: 'admin',
   activeMenu: ['verification'],
+  permission: ['ketua', 'super_admin'],
+
   breadcrumb: [
     {
       label: 'Dashboard',
